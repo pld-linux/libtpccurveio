@@ -1,0 +1,36 @@
+--- libtpccurveio/Makefile.orig	2007-09-13 10:40:54.000000000 +0200
++++ libtpccurveio/Makefile	2008-01-20 12:12:17.931357569 +0100
+@@ -73,8 +73,8 @@
+ LIBRARY		= libtpccurveio
+ SOURCES 	= dft.c dftio.c dftunit.c petunits.c mathfunc.c ncifile.c \
+                   result.c dftres.c cpt.c idwc.c if.c libtpccurveiov.c
+-OBJECTS 	= ${SOURCES:.c=.o}
+-LIBARCHIVE	= ${LIBRARY}.a
++OBJECTS 	= ${SOURCES:.c=.lo}
++LIBARCHIVE	= ${LIBRARY}.la
+ DOXYGEN		= doxygen
+ CC		= gcc
+ CFLAGS 		= -std=gnu99 -s -Wall -O ${INCLUDE}
+@@ -98,9 +98,12 @@
+ # ------------- Compilation: --------------------------------------------------#
+ compile: ${LIBARCHIVE} ${LIBEXEC}
+ 
++%.lo: %.c
++	libtool --tag=CC --mode=compile $(CC) $(CFLAGS) -c $<
++
+ # Compile library
+ ${LIBARCHIVE}: ${OBJECTS}
+-	${AR} -rvs ${LIBARCHIVE} ${OBJECTS}
++	libtool --tag=CC --mode=link $(CC) $(LDFLAGS) $(CFLAGS) -o $@ $^ -ltpcmisc -rpath $(PET_LIB)
+ 
+ # Compile executable
+ ${LIBEXEC}: ${LIBARCHIVE} ${LIBRARY}.c
+@@ -120,7 +123,7 @@
+ install: libversion libinstall execinstall
+ 
+ libinstall: ${LIBARCHIVE}
+-	${ADDDATE} -i=${LIBRARY}.version -o=${PET_LIB} -nodate ${LIBARCHIVE}
++	libtool --tag=CC --mode=install install $(LIBARCHIVE) $(DESTDIR)$(PET_LIB)
+ 
+ execinstall: ${LIBEXEC}
+ 	${ADDDATE} -i=${LIBRARY}.version -o=${PET_BIN} -nodate -copy ${LIBEXEC}
