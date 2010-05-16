@@ -10,6 +10,7 @@ Source0:	http://www.turkupetcentre.net/software/libsrc/%{name}_%(echo %{version}
 Patch0:		%{name}-shared.patch
 URL:		http://www.turkupetcentre.net/software/libdoc/libtpccurveio/
 BuildRequires:	libtpcmisc-devel >= 1.3.0
+BuildRequires:	unzip
 Requires:	libtpcmisc >= 1.3.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
